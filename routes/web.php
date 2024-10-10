@@ -6,6 +6,7 @@ use App\Models\Car;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -29,9 +30,9 @@ Route::prefix('cars')->middleware('auth')->group(function () {
         return Inertia::render('Car/Create');
     })->name('cars.create');
 
-    Route::get('/edit/{car}', function (){
+    Route::get('/edit/{car?}', function (Request $request){
        return Inertia::render('Car/Create',[
-//           'car'=>
+           'car' => Car::find($request->car)??null,
        ]);
     })->name('cars.edit');
 

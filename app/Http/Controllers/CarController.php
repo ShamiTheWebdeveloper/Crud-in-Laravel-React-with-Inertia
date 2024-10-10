@@ -14,7 +14,7 @@ class CarController extends Controller
         return Inertia::render('Car/Index', ['cars' => Car::all()]);
     }
 
-    public function store(FormRequest $request): \Illuminate\Http\RedirectResponse
+    public function store(FormRequest $request)
     {
         $validate=$request->validate([
             'company' => 'required|min:3',
@@ -22,8 +22,9 @@ class CarController extends Controller
             'description' => 'required|min:20',
         ]);
         $validate['user_id'] = Auth::id();
-        $car = new Car($validate);
-        $car->save();
+        Car::updateOrCreate(
+            ['id' => $request['id']],$validate
+        );
         return redirect()->route('cars.index');
     }
     public function destroy(Car $car)
